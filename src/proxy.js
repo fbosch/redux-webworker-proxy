@@ -3,17 +3,12 @@ import { proxy, proxyValue, expose } from 'comlinkjs'
 export const exposeReducer = reducer => {
 	if (!self) return reducer
 	class ReducerWorker {
-		constructor() {
-			this.rootReducer = reducer
-			this.active = true
-		}
-
 		createWorkerAction(action, newState) {
 			return ({ type: action.type, payload: newState, meta: { fromWorker: true } })
 		}
 
 		dispatch(state, action) {
-			const newState = this.rootReducer(state, action)
+			const newState = reducer(state, action)
 			return this.createWorkerAction(action, newState)
 		}
 	}

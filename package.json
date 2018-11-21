@@ -1,13 +1,13 @@
 {
   "name": "redux-webworker-proxy",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "repository": "https://github.com/fbosch/redux-webworker-proxy.git",
   "author": "fbosch <frede.bosch@gmail.com>",
   "license": "MIT",
   "scripts": {
     "dev": "parcel demo/index.html",
-    "build" : "parcel build demo/index.html"
+    "build" : "parcel build src/proxy.js"
   },
   "dependencies": {
     "comlinkjs": "^3.0.3"

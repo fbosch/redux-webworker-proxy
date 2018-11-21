@@ -36,6 +36,7 @@ store.subscribe(() => {
 	document.body.innerText = number + '  (' + (worker ? 'worker' : 'main thread') + ')'
 })
 
+store.dispatch(sendTest(1321321321212))
 
 
 
