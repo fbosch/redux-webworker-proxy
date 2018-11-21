@@ -1,6 +1,6 @@
 {
   "name": "redux-webworker-proxy",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "repository": "https://github.com/fbosch/redux-webworker-proxy.git",
   "author": "fbosch <frede.bosch@gmail.com>",
   "license": "MIT",
