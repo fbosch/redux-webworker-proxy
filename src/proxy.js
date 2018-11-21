@@ -13,7 +13,7 @@ export const exposeReducer = reducer => {
 }
 
 export const reducerProxyMiddleware = proxy => store => next => action => {
-  if (action.meta.handleInWorker && proxy) {
+  if (action.meta && action.meta.handleInWorker && proxy) {
     return proxy.then(worker => worker)
       .then(worker => worker.dispatch(store.getState(), action))
       .then(next)

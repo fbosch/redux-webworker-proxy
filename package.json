@@ -1,6 +1,6 @@
 {
   "name": "redux-webworker-proxy",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "repository": "https://github.com/fbosch/redux-webworker-proxy.git",
   "author": "fbosch <frede.bosch@gmail.com>",
   "license": "MIT",
@@ -13,7 +13,7 @@
   "source": "src/proxy.js",
   "scripts": {
     "dev": "parcel demo/index.html",
-    "build": "microbundle  src/proxy.js",
+    "build": "microbundle src/proxy.js",
     "test": "standard src/proxy.js"
   },
   "dependencies": {
