@@ -37,6 +37,7 @@ store.subscribe(() => {
 })
 
 store.dispatch(sendTest(1321321321212))
+store.dispatch(sendTest(1321321321212))
 
 
 
