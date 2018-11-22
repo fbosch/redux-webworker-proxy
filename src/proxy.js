@@ -5,7 +5,7 @@ export const exposeReducer = reducer => {
 	class ReducerWorker {
 		dispatch(state, action) {
 			const newState = reducer(state, action)
-			return ({ type: action.type, payload: newState, _workerProxy: true })
+			return ({ newState, _workerProxy: true })
 		}
 	}
 	expose(ReducerWorker, self)
@@ -14,7 +14,7 @@ export const exposeReducer = reducer => {
 
 export const reducerProxyMiddleware = proxy => store => next => action => {
   if (action.meta && action.meta.useWorker && proxy) {
-    return proxy.then(worker => worker)
+    proxy.then(worker => worker)
       .then(worker => worker.dispatch(store.getState(), action))
       .then(next)
   } else {
@@ -29,7 +29,7 @@ export const createProxy = worker => {
 
 export const proxyMetaReducer = reducer => (state, action) => {
   if (action._workerProxy) {
-    return state = { ...state, ...action.payload }
+    return state = { ...state, ...action.newState }
   }
   const nextState = reducer ? reducer(state, action) : state
   return nextState
