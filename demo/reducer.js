@@ -1,9 +1,15 @@
 /* eslint-env worker */
-const initialState = { number: 0 }
+function slowFunction (baseNumber) {
+  let result = 0
+  for (var i = Math.pow(baseNumber, 7); i >= 0; i--) {
+    result += Math.atan(i) * Math.tan(i)
+  }
+  return result
+}
 
-export default (state = initialState, action) => {
+export default (state, action) => {
   switch (action.type) {
-    case 'TEST': return { ...state, number: action.payload * Math.sqrt(2), thread: self.document ? 'main' : 'worker' }
+    case 'TEST': return { ...state, number: Math.floor(slowFunction(action.payload)), thread: self.document ? 'Main Thread' : 'Worker Thread' }
   }
   return state
 }
