@@ -28,15 +28,11 @@ const reducers = compose(connectWorkers)(workerReducer)
 const store = createStore(reducers, initialState, composedEnhancers)
 
 const checkbox = document.querySelector('input[type="checkbox"]')
-const changeChecked = event => {
-  const check = event.target.checked
-  if (check === false) terminateAllWorkers()
-}
-checkbox.addEventListener('change', changeChecked)
-
+checkbox.addEventListener('change', event => event.target.checked && terminateAllWorkers())
 const sendTest = number => ({ type: 'TEST', payload: number, meta: { useWorker: checkbox.checked } })
 
 const counter = document.querySelector('.counter')
+
 store.subscribe(() => window.requestAnimationFrame(() => {
   const { number, thread } = store.getState()
   counter.innerText = number + ' \n' + '(' + thread + ')'
@@ -44,7 +40,7 @@ store.subscribe(() => window.requestAnimationFrame(() => {
 
 window.setInterval(() => {
   store.dispatch(sendTest(Math.random() * 10))
-}, 28)
+}, 100)
 
 const wrapperEl = document.querySelector('.wrapper')
 const numberOfEls = 200

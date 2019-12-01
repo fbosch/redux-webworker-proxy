@@ -34,17 +34,13 @@ const getReducerProxyForWorker = worker => {
 }
 
 const terminateWorkerAndProxy = identifier => {
-  if (!runningWorkers.has(identifier)) return
-  window.requestIdleCallback(() => {
-    if (!runningWorkers.has(identifier)) return
-    const workerProxy = runningWorkers.get(identifier)
-    const webWorker = workers.get(identifier)
-    workerProxy[Comlink.releaseProxy]()
-    webWorker.terminate()
-    runningWorkers.delete(identifier)
-    workers.delete(identifier)
-    terminators.delete(identifier)
-  })
+  const workerProxy = runningWorkers.get(identifier)
+  const webWorker = workers.get(identifier)
+  workerProxy[Comlink.releaseProxy]()
+  webWorker.terminate()
+  runningWorkers.delete(identifier)
+  workers.delete(identifier)
+  terminators.delete(identifier)
 }
 
 const terminateWorkerOnIdle = identifier => window.setTimeout(() => terminateWorkerAndProxy(identifier), getOptionsForIdentifier(identifier).idleTimeout)
@@ -61,9 +57,11 @@ const getProxyByIdentifier = identifier => {
     } else {
       const spawnWorker = workerSpawners.get(identifier)
       const worker = spawnWorker()
-      runningWorkers.set(identifier, worker)
-      if (options.terminateOnIdle) window.requestIdleCallback(() => terminators.set(identifier, terminateWorkerOnIdle(identifier)))
-      return getReducerProxyForWorker(worker)
+      if (worker) {
+        runningWorkers.set(identifier, worker)
+        if (options.terminateOnIdle) window.requestIdleCallback(() => terminators.set(identifier, terminateWorkerOnIdle(identifier)))
+        return getReducerProxyForWorker(worker)
+      }
     }
   }
 }
@@ -75,9 +73,14 @@ export const connectReducerWorker = reducer => (Worker, { identifier = true, ...
     const isConstructor = Boolean(Worker.prototype) && Boolean(Worker.prototype.constructor.name)
     const worker = isConstructor ? () => new Worker() : (typeof Worker === 'function' ? () => Worker() : () => Worker)
     const spawnWorker = () => {
-      const webWorker = worker()
-      workers.set(identifier, webWorker)
-      return Comlink.wrap(webWorker)
+      try {
+        const webWorker = worker()
+        workers.set(identifier, webWorker)
+        return Comlink.wrap(webWorker)
+      } catch (e) {
+        console.log(e)
+        return null
+      }
     }
     identifiers.add(identifier)
     workerSpawners.set(identifier, spawnWorker)
@@ -87,13 +90,12 @@ export const connectReducerWorker = reducer => (Worker, { identifier = true, ...
 }
 
 export const exposeReducer = reducer => {
-  if (IS_WORKER) { // is Worker
+  if (IS_WORKER) {
     const exposedReducer = (state, action) => {
       const result = reducer(state, action)
       if (state === result) return null
       return result
     }
-    // eslint-disable-next-line
     Comlink.expose(exposedReducer, self)
   }
   return reducer
