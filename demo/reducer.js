@@ -9,7 +9,7 @@ function slowFunction (baseNumber) {
 
 export default (state, action) => {
   switch (action.type) {
-    case 'TEST': return { ...state, number: Math.floor(slowFunction(action.payload)), thread: self.document ? 'Main Thread' : 'Worker Thread' }
+    case 'CALCULATE': return { ...state, number: Math.floor(slowFunction(action.payload)), thread: self.document ? 'Main Thread' : 'Worker Thread' }
   }
   return state
 }

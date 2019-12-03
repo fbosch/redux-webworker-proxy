@@ -21,16 +21,16 @@ const composedEnhancers = compose(middleware, ...enhancers)
 
 const reducers = compose(connectWorkers)(workerReducer)
 const store = createStore(reducers, initialState, composedEnhancers)
-
-const checkbox = document.querySelector('input[type="checkbox"]')
-checkbox.addEventListener('change', event => event.target.checked && terminateAllWorkers())
-const sendTest = number => ({ type: 'TEST', payload: number, meta: { useWorker: checkbox.checked } })
+const sendNumber = number => ({ type: 'CALCULATE', payload: number, meta: { useWorker: checkbox.checked } })
 
 const counter = document.querySelector('.counter')
-
 store.subscribe(() => window.requestAnimationFrame(() => {
   const { number, thread } = store.getState()
   counter.innerText = number + ' \n' + '(' + thread + ')'
 }))
 
-window.setInterval(() => store.dispatch(sendTest(Math.random() * 10)), 100)
+const checkbox = document.querySelector('input[type="checkbox"]')
+checkbox.addEventListener('change', event => event.target.checked && terminateAllWorkers())
+
+store.dispatch(sendNumber(Math.random()))
+window.setInterval(() => store.dispatch(sendNumber(Math.random() * 10)), 200)

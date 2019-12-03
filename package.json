@@ -13,11 +13,12 @@
   "source": "src/proxy.js",
   "scripts": {
     "dev": "parcel demo/index.html",
-    "build": "microbundle src/redux-webworker-proxy.js",
+    "build": "microbundle src/redux-webworker-proxy.js && parcel build demo/index.html --out-dir dist/demo",
     "test": "standard src/*"
   },
   "dependencies": {
-    "comlink": "^4.1.0"
+    "comlink": "^4.1.0",
+    "redux": "^4.0.4"
   },
   "peerDependencies": {
     "redux": "^4.0.4"

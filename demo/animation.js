@@ -1,7 +1,7 @@
 const anime = window.anime
 const wrapperEl = document.querySelector('.wrapper')
 const numberOfEls = 200
-const duration = 3000
+const duration = 4000
 const delay = duration / numberOfEls
 
 const tl = anime.timeline({
