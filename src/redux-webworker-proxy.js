@@ -68,7 +68,7 @@ const getProxyByIdentifier = identifier => {
 
 export const terminateAllWorkers = () => identifiers.forEach(terminateWorkerAndProxy)
 
-export const connectReducerWorker = reducer => (Worker, { identifier = true, ...options } = { }) => {
+export const connectReducerToWorker = reducer => (Worker, { identifier = true, ...options } = { }) => {
   if (SUPPORTS_PROXIES && Worker) {
     const isConstructor = Boolean(Worker.prototype) && Boolean(Worker.prototype.constructor.name)
     const worker = isConstructor ? () => new Worker() : (typeof Worker === 'function' ? () => Worker() : () => Worker)

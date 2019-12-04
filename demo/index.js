@@ -1,7 +1,7 @@
 /* eslint-env browser */
 
 import { applyMiddleware, compose, createStore } from 'redux'
-import { connectReducerWorker, connectWorkers, terminateAllWorkers, workerMiddleware } from '../src/redux-webworker-proxy'
+import { connectReducerToWorker, connectWorkers, terminateAllWorkers, workerMiddleware } from '../src/redux-webworker-proxy'
 
 import reducer from './reducer'
 
@@ -14,7 +14,7 @@ if (typeof devToolsExtension === 'function') {
 }
 
 const worker = () => new Worker('./reducer.worker.js')
-const workerReducer = connectReducerWorker(reducer)(worker, { terminateOnIdle: false })
+const workerReducer = connectReducerToWorker(reducer)(worker, { terminateOnIdle: false })
 const middleware = applyMiddleware(workerMiddleware)
 
 const composedEnhancers = compose(middleware, ...enhancers)
